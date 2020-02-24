@@ -31,6 +31,10 @@ let hotpo = (n) => {
          console.log(i * 0.1);
      }
 ```
+```
+'11' + 1 = '111'
+'11' - 1 = 10
+```
 - window reference
 
 ## Reserved Words
