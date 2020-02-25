@@ -2,11 +2,15 @@
 <html lang="hu">
 
 <head>
+    <!-- igy néz ki egy komment, nem renderelődik sehogy, nem része a DOMnak, de source nézetben látható -->
+    <!-- "kötelező elemek" -->
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <!-- "/kötelező elemek" -->
 
     <title>BrainingHub - Alapozó Képzés</title>
+    <!-- egy kis CSS: -->
     <style>
         ul li:nth-child(2) {
             color: red;
@@ -27,7 +31,8 @@
 <body>
 <header>
     <h1>BrainingHub - Alapozó Képzés</h1>
-    <h3>Hello World!</h3>
+    <h2>Hello World!</h2>
+    <h3>Még egy alcím...</h3>
 </header>
 <section id="content">
     <p>Ez itt egy lista:</p>
@@ -48,16 +53,21 @@
         <a href="https://index.hu">Vajon merre visz ez a link?</a>
     </p>
 </section>
+<!-- egy kis javascript -->
 <script>
+    // ez egy JS komment, nem csinál semmit vele a böngésző, source nézetben látható
     console.log("Én is lefutottam!");
 
+    // a klikk event felrakása
     let clickEvent = (event) => {
         console.log(event.currentTarget);
         window.alert("Hello World!");
     };
+    // a kék négyzetre
     let kek = document.querySelector('.blue-square');
     kek.addEventListener('click', clickEvent);
 
+    // a bemutatott hotpo algoritmus egy lehetséges megvalósulása
     let hotpo = (n) => {
         let i = 0;
         do {
@@ -72,6 +82,7 @@
         return i;
     };
 
+    // rögtön meg is hívjuk egyszer
     hotpo(9);
 </script>
 </body>
