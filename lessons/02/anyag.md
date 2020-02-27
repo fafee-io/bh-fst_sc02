@@ -3,14 +3,14 @@
 ### Synopsis
 
 - A program futásának, vezérlés haladásának megértése
-- Változók, függvényhívások
+- Változók, függvényhívások, ciklus, elágazás
 - JavaScript objektumok
 - Csak JS fájl, no HTML/CSS
 
 ## Változók, literálok, memória
 
 - Mi az a memória, hogyan kell ezt elképzelni
-- Mit jelent azt hogy létrejön egy változó (azonosítók mik lehetnek)
+- Mit jelent az hogy létrejön egy változó (azonosítók mik lehetnek)
 - Mi az a literál? (ismétlés)
 - (var) let vs const
 - function vs () => {}, formális paraméter lista
@@ -54,5 +54,6 @@ immutable = 56;
 
 - Írjunk egy függvényt mely kiszámolja két szám átlagát
 - Írjunk egy függvényt mely egy számról eldönti hogy prím vagy nem
+- Ezt felhasználva adjunk egy megoldást arra ami megszámolja két tetszőleges pozitív szám között a prímszámokat!
 - Hozzunk létre objektumokat, tömböket
 - Írjunk egy függvényt, mely a paraméterben kapott, téglalap objektumokból álló tömbben megszámolja hogy hánynak nagyobb a területe 10-nél
