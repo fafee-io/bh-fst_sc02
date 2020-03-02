@@ -1,6 +1,6 @@
 
 const HAROMSZOG = 'triangle';
-const TEGLALAP = 'rectangle'
+const TEGLALAP = 'rectangle';
 
 class Alakzat {
     constructor(type, a, b) {
