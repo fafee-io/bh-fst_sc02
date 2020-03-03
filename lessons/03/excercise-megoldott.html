@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="hu">
+
+<head>
+    <!-- igy néz ki egy komment, nem renderelődik sehogy, nem része a DOMnak, de source nézetben látható -->
+    <!-- "kötelező elemek" -->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <!-- "/kötelező elemek" -->
+
+    <title>BrainingHub - Alapozó Képzés</title>
+    <!-- egy kis CSS: -->
+    <style>
+        header {
+            text-align: center;
+        }
+
+        .generated {
+            min-width: 15px;
+            min-height: 15px;
+            border: 3px solid gray;
+            margin: 1px;
+            display: inline-block;
+        }
+
+        #generation-container {
+            border: 1px dashed black;
+            padding: 25px;
+        }
+
+        #generation-button {
+            color: white;
+            background-color: darkred;
+            width: 150px;
+            height: 40px;
+        }
+
+        #coloring-button {
+            color: white;
+            background-color: darkblue;
+            width: 150px;
+            height: 40px;
+        }
+
+        .legnagyobb {
+            background-color: red;
+        }
+
+        body {
+            background-color: #CCC;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1>BrainingHub - Alapozó Képzés</h1>
+    <h2>Téglalap színező berendezés!</h2>
+    <hr>
+</header>
+<section id="content">
+    <p>
+        A Varázslathoz kattintsunk a gombra...: 
+        <button id="generation-button">Generate</button>
+    </p>
+    <div id="generation-container">
+        <!-- ide generál -->
+    </div>
+    <p>
+        Színezéshez kattintsunk a gombra...:
+        <button id="coloring-button">Színezzél!</button>
+    </p>
+</section>
+<!-- szinező javascript -->
+<script>
+    console.log("Hmmm...");
+
+    let szinezo = () => {
+        let divek = document.querySelectorAll('#generation-container > div');
+        console.log(divek);
+        let max = 0;
+        let maxIndex;
+        for (let i = 0; i < divek.length; ++i) {
+            let div = divek[i];
+            let terulet = div.offsetWidth * div.offsetHeight;
+            if (max < terulet) {
+                max = terulet;
+                maxIndex = i;
+            }
+            console.log(terulet);
+        }
+        let legnagyobb = divek[maxIndex];
+        legnagyobb.classList.add('legnagyobb');
+    }
+
+    let coloringButton = document.querySelector('#coloring-button');
+    coloringButton.addEventListener('click', szinezo)
+
+</script>
+<!-- generáló javascript -->
+<script>
+    let genButton = document.querySelector('#generation-button');
+    let genContainer = document.querySelector('#generation-container');
+    let divTemplatePrefix = '<div class="generated" style="';
+    let divTemplateSuffix = '">&nbsp;</div>';
+
+    let randomBetween = (a, b) => {
+        return Math.floor(Math.random() * (b - a)) + a;
+    }
+
+    let clearGenContainer = () => {
+        genContainer.innerHTML = '';
+    }
+
+    let generateRectangles = () => {
+        let count = randomBetween(70, 90);
+        for (let i = 0; i < count ; ++i) {
+            let width = randomBetween(15, 75);
+            let height = randomBetween(15, 55);
+            width = 'width: ' + width + 'px;';
+            height = 'height: ' + height + 'px;';
+            genContainer.innerHTML += (divTemplatePrefix + width + height + divTemplateSuffix);
+        }
+    }
+
+    genButton.addEventListener('click', (event) => {
+        clearGenContainer();
+        generateRectangles();
+    });
+</script>
+</body>
+
+</html>
