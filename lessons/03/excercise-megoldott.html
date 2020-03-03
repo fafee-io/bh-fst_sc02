@@ -43,6 +43,7 @@
             height: 40px;
         }
 
+        /* színező class */
         .legnagyobb {
             background-color: red;
         }
@@ -76,26 +77,29 @@
 <script>
     console.log("Hmmm...");
 
-    let szinezo = () => {
+    // a fv ami lefut a gombnyomásra
+    const szinezo = () => {
+        // összeszedjük a célpont diveket
         let divek = document.querySelectorAll('#generation-container > div');
         console.log(divek);
+        // maximum keresés index megjegyzéssel együtt
         let max = 0;
         let maxIndex;
-        for (let i = 0; i < divek.length; ++i) {
-            let div = divek[i];
-            let terulet = div.offsetWidth * div.offsetHeight;
+        for (let i = 0; i < divek.length; ++i) { // tömb bejáró ciklus
+            let div = divek[i]; // tömb egy eleme
+            let terulet = div.offsetWidth * div.offsetHeight; // területszámítás
             if (max < terulet) {
-                max = terulet;
-                maxIndex = i;
+                max = terulet; // legnagyobb területnél nagyobbat találtunk
+                maxIndex = i; // index 'mentés'
             }
             console.log(terulet);
         }
-        let legnagyobb = divek[maxIndex];
-        legnagyobb.classList.add('legnagyobb');
+        let legnagyobb = divek[maxIndex]; // a legnagyobb div DOM eleme(ének megfelelp objektum)
+        legnagyobb.classList.add('legnagyobb'); // a színező class hozzáadása
     }
 
-    let coloringButton = document.querySelector('#coloring-button');
-    coloringButton.addEventListener('click', szinezo)
+    let coloringButton = document.querySelector('#coloring-button'); // színező gomb DOM eleme
+    coloringButton.addEventListener('click', szinezo) // a fv, mint függvény-objektum átadása a click event feldolgozására
 
 </script>
 <!-- generáló javascript -->
@@ -105,14 +109,17 @@
     let divTemplatePrefix = '<div class="generated" style="';
     let divTemplateSuffix = '">&nbsp;</div>';
 
+    // a JS által 0-1 között generált véletlen számot matekozza a és b számok közé
     let randomBetween = (a, b) => {
         return Math.floor(Math.random() * (b - a)) + a;
     }
 
+    // kiüríti a konténer tartalmát teljes egészében
     let clearGenContainer = () => {
         genContainer.innerHTML = '';
     }
 
+    // legenerálja a diveket
     let generateRectangles = () => {
         let count = randomBetween(70, 90);
         for (let i = 0; i < count ; ++i) {
@@ -121,6 +128,7 @@
             width = 'width: ' + width + 'px;';
             height = 'height: ' + height + 'px;';
             genContainer.innerHTML += (divTemplatePrefix + width + height + divTemplateSuffix);
+            // a fent látható alapokba beleírja a width / height css értékeket, és elhelyezi a DOMban
         }
     }
 
