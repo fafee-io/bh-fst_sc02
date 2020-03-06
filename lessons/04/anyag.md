@@ -3,6 +3,8 @@
 ## Synopsis
 
 - Új fogalom: az objektum, JSON
+- For ciklus 'in' kulcsszóval
+- Blokk kívül / belül hibák
 - Az elkezdett feladat folytatása új feature-k hozzáadásával
 
 ## Objektum, Ojjektum, JSON
