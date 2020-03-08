@@ -17,4 +17,4 @@
 
 - A JSből hiányzik más nyelveknél már a Hello World szintjén megszokott klasszikus 'beolvasás'
 - A JSben viszont ott a kapcsolódó weblap, ami ennek sokkal szofisztikáltabb módszerére képes
-- Megnézzük hogyan
+- Megnézzük hogyan: input és select elemek felhasználása

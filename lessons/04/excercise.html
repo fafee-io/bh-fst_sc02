@@ -30,10 +30,13 @@
         }
 
         #generation-button {
-            color: white;
-            background-color: darkred;
+            color: #222;
+            background-color: rgb(17, 232, 141);
             width: 150px;
             height: 40px;
+            border-radius: 10px;
+            box-shadow: 3px 3px 5px #666;
+            border: 1px solid #777;
         }
 
         #coloring-button {
@@ -45,10 +48,11 @@
 
         /* színező class */
         .legnagyobb {
-            background-color: red;
+            /* !important megjelölésű szabály magasabb precedenciájú minden nem !important szabálynál */
+            background-color: red !important;
         }
         .legkisebb {
-            background-color: green;
+            background-color: green !important;
         }
 
         body {
@@ -67,6 +71,16 @@
     <p>
         A Varázslathoz kattintsunk a gombra...: 
         <button id="generation-button">Generate</button>
+        <!-- egyszerű input mező -->
+        <input name="teglalap-szam" placeholder="Irj be egy számot" value="">
+        <!-- egyszerű select mező -->
+        <select name="teglalap-szin">
+            <option value="#F00">Piros</option>
+            <option value="#0F0">Zöld</option>
+            <option value="#00F">Kék</option>
+            <option value="#000" disabled>Fekete</option> <!-- nem választható -->
+            <option value="#FFF" selected>-</option> <!-- alapból kijelölt -->
+        </select>
     </p>
     <div id="generation-container">
         <!-- ide generál -->
@@ -131,14 +145,20 @@
     }
 
     // legenerálja a diveket
+    // órai módosítások:
     let generateRectangles = () => {
-        let count = randomBetween(70, 90);
+        // inputmező kijelölése
+        let inputMezo = document.querySelector('[name=teglalap-szam]');
+        // select elem kijelölése
+        let select = document.querySelector('[name=teglalap-szin]');
+        let count = parseInt(inputMezo.value); // a honlapon beírt érték kiolvasása
         for (let i = 0; i < count ; ++i) {
             let width = randomBetween(15, 75);
             let height = randomBetween(15, 55);
             width = 'width: ' + width + 'px;';
             height = 'height: ' + height + 'px;';
-            genContainer.innerHTML += (divTemplatePrefix + width + height + divTemplateSuffix);
+            let color = 'background-color: ' + select.value + ';'; // a selectből választott érték használata
+            genContainer.innerHTML += (divTemplatePrefix + color + width + height + divTemplateSuffix);
             // a fent látható alapokba beleírja a width / height css értékeket, és elhelyezi a DOMban
         }
     }
