@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="hu">
+
+<head>
+    <!-- igy néz ki egy komment, nem renderelődik sehogy, nem része a DOMnak, de source nézetben látható -->
+    <!-- "kötelező elemek" -->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <!-- "/kötelező elemek" -->
+
+    <title>BrainingHub - Alapozó Képzés</title>
+    <!-- egy kis CSS: -->
+    <style>
+        header {
+            text-align: center;
+        }
+
+        body {
+            background-color: #CCC;
+        }
+
+        #result-container {
+            position: relative;
+            width: 300px;
+            height: 500px;
+            margin: 20px auto;
+            background-color: white;
+            background-image: url('./suspension.png');
+            box-shadow: 5px 5px 10px #333;
+        }
+
+        /* Közös elemei a rajzolt kerekeknek: */
+        .drawn-wheel {
+            position: absolute;
+            border-radius: 6px;
+            border: 2px solid;
+            top: 225px;
+            left: 118px;
+            width: 0px;
+            height: 100px;
+        }
+        /* Eltérő elemei a rajzolt kerekeknek: */
+        #current-wheel {
+            border-color: darkgreen;
+        }
+        #desired-wheel {
+            border-color: darkred;
+        }
+
+        .bekero {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1>BrainingHub - Alapozó Képzés</h1>
+    <h2>Felni / Abroncs méretező berendezés!</h2>
+    <hr>
+</header>
+<section id="content">
+    <div id="setup-container">
+        <div class="bekero" id="current">
+            <p>Jelenlegi állapot:</p>
+            Abroncs:
+            <input type="number" name="tyre-width" value="235" title="A jelenlegi abroncs szélesség"> /
+            <input type="number" name="tyre-profile" value="50" title="A jelenlegi abroncs profil érték"> R
+            <input type="number" name="diameter" value="18" title="A jelenlegi felni átmérő">
+            <br>
+            Felni:
+            <input type="number" name="rim-width" value="8" title="A jelenlegi felni szélessége"> ET: 
+            <input type="number" name="offset" value="30" title="A jelenlegi offszet, ET érték">
+        </div>
+        <div class="bekero" id="desired">
+            <p>Tervezett állapot:</p>
+            Abroncs:
+            <input type="number" name="tyre-width" value="295" title="A tervezett abroncs szélesség"> /
+            <input type="number" name="tyre-profile" value="35" title="A tervezett abroncs profil érték"> R
+            <input type="number" name="diameter" value="20" title="A tervezett felni átmérő">
+            <br>
+            Felni:
+            <input type="number" name="rim-width" value="10" title="A tervezett felni szélessége"> ET: 
+            <input type="number" name="offset" value="40" title="A tervezett offszet, ET érték">
+        </div>
+    </div>
+    <button id="go">Go!</button>
+    <hr>
+    <div id="result-container">
+        <div class="drawn-wheel" id="current-wheel"></div>
+        <div class="drawn-wheel" id="desired-wheel"></div>
+    </div>
+</section>
+<!-- helper függvények javascript -->
+<script>
+    // kiemelt konstansokat csupa nagybetűvel szokás felvenni, jelezve hogy konstansok
+    // kiemelés lényege az hogy változtatás esetén csak 1x kell változtatni, illetve esélyünk sincs itt vagy ott elírni
+    const INCH_EXCHANGE = 25.4 // inch-ből milliméter váltó szám
+    const PX_EXCHANGE = 2.6 // mm-ből pixelre váltó érték
+
+    // két változó értékből előállítja a konkrét selector-t
+    // csökkenti az elírás lehetőségét és az ismétlést
+    const createSelector = (side, input) => {
+        return '#' + side + ' [name=' + input + ']';
+    }
+
+    // összeszedi a beírt adatokat egy könnyen kezelhető objektumba ( {kulcs:érték} )
+    const parseData = () => {
+        // 10 érték kell, itt nagyon spórolni nem lehet
+        let tyreWidth = document.querySelector(createSelector('current', 'tyre-width'));
+        let tyreProfile = document.querySelector(createSelector('current', 'tyre-profile'));
+        let diameter = document.querySelector(createSelector('current', 'diameter'));
+        let rimWidth = document.querySelector(createSelector('current', 'rim-width'));
+        let offset = document.querySelector(createSelector('current', 'offset'));
+        let desiredTyreWidth = document.querySelector(createSelector('desired', 'tyre-width'));
+        let desiredTyreProfile = document.querySelector(createSelector('desired', 'tyre-profile'));
+        let desiredDiameter = document.querySelector(createSelector('desired', 'diameter'));
+        let desiredRimWidth = document.querySelector(createSelector('desired', 'rim-width'));
+        let desiredOffset = document.querySelector(createSelector('desired', 'offset'));
+        
+        return {
+            current: {
+                tyreWidth: parseInt(tyreWidth.value),
+                tyreProfile: parseInt(tyreProfile.value),
+                diameter: parseInt(diameter.value),
+                rimWidth: parseInt(rimWidth.value),
+                offset: parseInt(offset.value),
+            },
+            desired: {
+                tyreWidth: parseInt(desiredTyreWidth.value),
+                tyreProfile: parseInt(desiredTyreProfile.value),
+                diameter: parseInt(desiredDiameter.value),
+                rimWidth: parseInt(desiredRimWidth.value),
+                offset: parseInt(desiredOffset.value),
+            }
+        };
+    };
+
+    // kiszámolja a kerék teljes magasságát
+    // a profile egy % érték! a diameter inch-ben van megadva
+    const calculateWheelHeight = (width, profile, diameter) => {
+        // a profile % érték, így elosztjuk 100al szorzás előtt
+        let oldalfalMM = width * (profile / 100);
+        // az átmérő inchben van, konvertáljuk mm-re
+        let atmeroMM = diameter * INCH_EXCHANGE;
+        return (oldalfalMM * 2 + atmeroMM);
+        // egy sorban:
+        // return width * profile / 100 * 2 + diameter * INCH_EXCHANGE;
+        // ilyenekben pl a /100*2-tőt nem szokás /50 összevonni:
+        // egyrészt kevésbé fog látszani hogy mit csinálunk (és a kód olvashatósága fontosabb)
+        // másrészt literálok esetén a fordító/interpreter titokban maga is megcsinálja a triviális összevonásokat még számolás előtt
+    }
+
+    // lerajzolja a kerekek állását az odaképzelt (háttérkép) felfüggesztéshez illeszkedve
+    // ettől a függvénytől nem várunk visszatérési értéket, feladata a DOM elemek pozicióját beállítani
+    const drawWheels = (data, calculated) => {
+        // konstansok, kint is felvehetnénk őket, de csak a rajzoláskor kellenek -> minél kevesebb helyen látszik egy változó, annál jobb
+        // a háttérképre rajzolt felfüggesztés helyzete alapján számított értékek
+        const Y_ORIGIN = 275; // az Y (függőleges) tengely menti
+        const X_ORIGIN = 120; // az X (vízszintes) tengely menti
+        // beállítandó DOM elemek összeszedése
+        let currentWheel = document.querySelector('#current-wheel');
+        let desiredWheel = document.querySelector('#desired-wheel');
+        // valódi CSS szabályokat kell előállítani, azaz kötelező a "px" végződés
+        // a PX_EXCHANGE osztás konvertálja át a mm értékeket pixelekre, értéke a háttérkép méretéből következik
+        currentWheel.style.width = data.current.tyreWidth / PX_EXCHANGE + 'px';
+        currentWheel.style.height = calculated.current.wheelHeight / PX_EXCHANGE + 'px';
+        // azt akarjuk hogy a képen lévő felfüggesztés "közepe" legyen a kerék "közepén" - így a kerék magasságának felével megyünk feljebb
+        // azaz vonjuk ki az "eltolt" origóból (a konstans)
+        currentWheel.style.top = (Y_ORIGIN - calculated.current.wheelHeight / PX_EXCHANGE / 2) + 'px';
+        // vízszintes "középen" izgalmasabb az offset miatt, ezt először ki kell vonni a szélesség feléből
+        // az offset-nek a fizikai valóságban is pontosan ez a dolga: értékével eltolja a kereket befelé, hogy elférjen a kerékjáraton belül
+        currentWheel.style.left = (X_ORIGIN - (data.current.tyreWidth / 2 - data.current.offset) / PX_EXCHANGE) + 'px';
+
+        desiredWheel.style.width = data.desired.tyreWidth / PX_EXCHANGE + 'px';
+        desiredWheel.style.height = calculated.desired.wheelHeight / PX_EXCHANGE + 'px';
+        desiredWheel.style.top = (Y_ORIGIN - calculated.desired.wheelHeight / PX_EXCHANGE / 2) + 'px';
+        desiredWheel.style.left = (X_ORIGIN - (data.desired.tyreWidth / 2 - data.desired.offset) / PX_EXCHANGE) + 'px';
+    }
+
+    // kiszámolja a származtatott értékeket a megadottak alapján
+    // ebben már egy kicsit spórolunk az értékadásokkal és egyből az objektum értékadásba írunk párat
+    const calculate = (data) => {
+        let currentWheelHeight = calculateWheelHeight(data.current.tyreWidth, data.current.tyreProfile, data.current.diameter);
+        let desiredWheelHeight = calculateWheelHeight(data.desired.tyreWidth, data.desired.tyreProfile, data.desired.diameter);
+
+        return {
+            current: {
+                circumference: currentWheelHeight * Math.PI,
+                wheelHeight: currentWheelHeight,
+            },
+            desired: {
+                circumference: desiredWheelHeight * Math.PI,
+                wheelHeight: desiredWheelHeight,
+            },
+            // HÁZI FELADAT:: 0 helyére a megfelelő kifejezést:
+            difference: {
+                poke: 0, // mennyivel ér majd kijjebb az új kerék?
+                // hint: két elemből adódik: a szélességek különbsége(-ének a fele)
+                // hint: az ET-k különbsége (ne feledjük: nagyobb ET beljebb tolja a kereket)
+                backPoke: 0, // mennyivel ér majd beljebb az új kerék, a felfüggesztés felé
+                // hint: fentiekhez hasonlóan, másik irányba
+                // hint: a rajz amit már csinál a program segít az ellenőrzésben, az ezeket már helyesen adja ki, csak nem számoltuk ki külön
+                error: 0, // mekkora százalékos eltérést fog mutatni a kocsi sebbességmérője?
+                // hint: a sebbességmérő a tengelyfordulati időt méri, a tengelyen, és ebből következtet
+                // hint: nagyobb keréknek nagyobb a kerülete, tehát 1 tengelyfordulaton többet megy előre az autó
+                // hint: bonyolultnak hangzik, de csak egy arányra vagyunk kiváncsiak, praktikusan %-ban kifejezve
+                // hint: nagyobb kerékkel az autó lassabbnak fogja mérni magát, kisebb kerékkel gyorsabbnak
+                rideHeightDiff: 0, // mennyit fog emelkedni az autó?
+                // hint: ez 2, már kiszámolt érték különbségének a fele
+            }
+        }
+    };
+</script>
+<!-- eventező javascript -->
+<script>
+    let goButton = document.querySelector('#go');
+    goButton.addEventListener('click', () => {
+        let data = parseData();
+        let calculated = calculate(data);
+        console.log( data );
+        console.log( calculated );
+        drawWheels(data, calculated);
+    });
+</script>
+</body>
+
+</html>

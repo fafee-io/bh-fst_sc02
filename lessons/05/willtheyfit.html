@@ -26,10 +26,6 @@
             background: white;
             box-shadow: 5px 5px 10px #333;
         }
-
-        .bekero {
-            display: inline-block;
-        }
     </style>
 </head>
 
@@ -41,30 +37,9 @@
 </header>
 <section id="content">
     <div id="setup-container">
-        <div class="bekero" id="current">
-            <p>Jelenlegi állapot:</p>
-            Abroncs:
-            <input type="number" name="abroncs-width" value="235"> /
-            <input type="number" name="abroncs-height" value="50"> R
-            <input type="number" name="diameter" value="18">
-            <br>
-            Felni:
-            <input type="number" name="felni-width" value="8"> ET: 
-            <input type="number" name="offset" value="30">
-        </div>
-        <div class="bekero" id="desired">
-            <p>Tervezett állapot:</p>
-            Abroncs:
-            <input type="number" name="abroncs-width" value="295"> /
-            <input type="number" name="abroncs-height" value="35"> R
-            <input type="number" name="diameter" value="20">
-            <br>
-            Felni:
-            <input type="number" name="felni-width" value="10"> ET: 
-            <input type="number" name="offset" value="40">
-        </div>
+        <div id="current"></div>
+        <div id="desired"></div>
     </div>
-    <button id="go">Go!</button>
     <hr>
     <div id="result-container">
         <img src="./suspension.png" alt="Felfüggesztés keresztmetszet" />
@@ -72,43 +47,11 @@
 </section>
 <!-- helper függvények javascript -->
 <script>
-    // összeszedi a beírt adatokat egy objektumba ( {kulcs:érték} )
-    const parseData = () => {
-        let abroncsWidth = document.querySelector('#current [name=abroncs-width]');
-        let abroncsHeight = document.querySelector('#current [name=abroncs-height]');
-        let diameter = document.querySelector('#current [name=diameter]');
-        let felniWidth = document.querySelector('#current [name=felni-width]');
-        let offset = document.querySelector('#current [name=offset]');
-        let desiredAbroncsWidth = document.querySelector('#desired [name=abroncs-width]');
-        let desiredAbroncsHeight = document.querySelector('#desired [name=abroncs-height]');
-        let desiredDiameter = document.querySelector('#desired [name=diameter]');
-        let desiredFelniWidth = document.querySelector('#desired [name=felni-width]');
-        let desiredOffset = document.querySelector('#desired [name=offset]');
-        
-        return {
-            current: {
-                abroncsWidth: parseInt(abroncsWidth.value),
-                abroncsHeight: parseInt(abroncsHeight.value),
-                diameter: parseInt(diameter.value),
-                felniWidth: parseInt(felniWidth.value),
-                offset: parseInt(offset.value),
-            },
-            desired: {
-                abroncsWidth: parseInt(desiredAbroncsWidth.value),
-                abroncsHeight: parseInt(desiredAbroncsHeight.value),
-                diameter: parseInt(desiredDiameter.value),
-                felniWidth: parseInt(desiredFelniWidth.value),
-                offset: parseInt(desiredOffset.value),
-            }
-        };
-    };
+
 </script>
 <!-- eventező javascript -->
 <script>
-    let goButton = document.querySelector('#go');
-    goButton.addEventListener('click', () => {
-        console.log( parseData() );
-    });
+    
 </script>
 </body>
 
