@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Számológép</title>
+    <style>
+        body {
+            background: darkblue;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        button {
+            width: 50px;
+        }
+
+        #keret {
+            margin: auto;
+            background: lightgray;
+            width: 300px;
+            height: 300px;
+        }
+
+        #allapot {
+            background: darkgray;
+            min-height: 20%;
+            height: 20%;
+        }
+
+        #gombsor {
+            background: lightblue;
+            min-height: 80%;
+            height: 80%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="keret">
+        <div id="allapot">
+            sffg
+        </div>
+        <div id="gombsor">
+            <table cellpadding="0px" cellspacing="0">
+                <tr>
+                    <td>
+                        <button id="mc" class="mbutton">MC</button>
+                    </td>
+                    <td>
+                        <button id="mr" class="mbutton">MR</button>
+                    </td>
+                    <td>
+                        <button id="ms" class="mbutton">MS</button>
+                    </td>
+                    <td>
+                        <button id="mplus" class="mbutton">M+</button>
+                    </td>
+                    <td>
+                        <button id="mminus" class="mbutton">M-</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="back" class="opbutton"><-</button>
+                    </td>
+                    <td>
+                        <button id="ce" class="opbutton">CE</button>
+                    </td>
+                    <td>
+                        <button id="c" class="opbutton">C</button>
+                    </td>
+                    <td>
+                        <button id="plusminus" class="opbutton">+-</button>
+                    </td>
+                    <td>
+                        <button id="gyok" class="opbutton">GYÖK</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="szam7" class="szambutton">7</button>
+                    </td>
+                    <td>
+                        <button id="szam8" class="szambutton">8</button>
+                    </td>
+                    <td>
+                        <button id="szam9" class="szambutton">9</button>
+                    </td>
+                    <td>
+                        <button id="osztas" class="opbutton">/</button>
+                    </td>
+                    <td>
+                        <button id="szazalek" class="opbutton">%</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="szam4" class="szambutton">4</button>
+                    </td>
+                    <td>
+                        <button id="szam5" class="szambutton">5</button>
+                    </td>
+                    <td>
+                        <button id="szam6" class="szambutton">6</button>
+                    </td>
+                    <td>
+                        <button id="szorzas" class="opbutton">*</button>
+                    </td>
+                    <td>
+                        <button id="reciprok" class="opbutton">1/x</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="szam3" class="szambutton">3</button>
+                    </td>
+                    <td>
+                        <button id="szam2" class="szambutton">2</button>
+                    </td>
+                    <td>
+                        <button id="szam1" class="szambutton">1</button>
+                    </td>
+                    <td>
+                        <button id="kivonas" class="opbutton">-</button>
+                    </td>
+                    <td>
+                       <!-- <button id="reciprok" class="opbutton">1/x</button> -->
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="szam0" class="szambutton" style="width:100px;">0</button>
+                    </td>
+                    <td>
+                        <button id="vesszo" class="szambutton">,</button>
+                    </td>
+                    <td>
+                        <button id="osszeadas" class="opbutton">+</button>
+                    </td>
+                    <td>
+                       <button id="eredmeny" class="opbutton">=</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

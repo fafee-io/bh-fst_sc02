@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Alapozó Képzés</title>
+        <style>
+            body {
+                background: black;
+            }
+            .alapozo {
+                background: #ffffff77
+            }
+        </style>
+    </head>
+    <body>
+        <div id="alapozoKepzes" class="alapozo">
+        </div>
+        <div id="alapozo2" class="alapozo">
+        </div>
+        <div id="alapozo3" class="alapozo">
+        </div>
+        <script>
+            function ertekadas(kinek, mit) {
+                var obj = document.getElementById(kinek);
+                obj.textContent = mit;
+            }
+            //var alapozo = document.getElementsByClassName("alapozo");
+            ertekadas("alapozoKepzes", "hello world");
+            ertekadas("alapozo2", "hello world");
+            ertekadas("alapozo3", "hello world");
+
+        </script>
+    </body>
+    </html>
