@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Számológép</title>
+    <script src="./js/definitions.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/site.css" />
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="keret">
+        <div id="allapot">
+            <div id="eredmenyosszeg">
+
+            </div>
+        </div>
+        <div id="gombsor">
+        </div>
+    </div>
+    <script>
+        function createGombsor(gombsor) {
+            var out = "<table cellpadding='0' cellspacing='0'>";
+            var sorok = gombsor['sorok'];
+            for (var index = 0; index < sorok.length; index++) {
+                var sor = sorok[index];
+                out += "<tr>";
+                for (var gombIndex = 0; gombIndex < sor.length; gombIndex++) {
+                    var gomb = sor[gombIndex];
+                    if (gomb == null) {
+                        continue;
+                    }
+                    switch (gomb['tipus']) {
+                        case hosszuGomb:
+                            out += "<td colspan='2'>";
+                            break;
+                        case normalEsUresGomb:
+                            console.log("ures gomb");
+                        //break;
+                        default:
+                            out += "<td>";
+                    }
+                    var id = gomb['id'];
+                    var clazz = gomb['class'];
+                    var value = gomb['value'];
+                    out += "<button id='" + id + "' class='" + clazz + "'>" + value + "</button>";
+                    out += "</td>";
+                }
+                out += "</tr>";
+            }
+            out += "</table>";
+            return out;
+        }
+
+
+        var gombsorDiv = document.getElementById("gombsor");
+        gombsorDiv.innerHTML = createGombsor(gombsor);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Számológép</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="./css/site.css" />
+        <script src="./js/site.js"></script>
+        <style>
+            * {
+                position: static;
+            }
+
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 14px;
+            }
+
+            /* Style the header */
+            header {
+                background-color: #aaaa26;
+                padding: 30px;
+                text-align: center;
+                font-size: 35px;
+                color: white;
+            }
+
+            input {
+                width:200px;
+                height:30px;
+                border: 1px solid darkgray;
+            }
+
+            button {
+                width:100px;
+                height:50px;
+                background: rgba(100, 100, 255, 0.5);
+                color: black;
+            }
+
+            button:hover {
+                background: white;
+                width:100px;
+                height:50px;
+            }
+
+            section {
+                width:100%;
+                background:yellow;
+                padding: 10px 10px 10px 10px;
+            }
+
+            footer {
+                background-color: #777;
+                padding: 10px;
+                text-align: center;
+                color: white;
+            }
+
+            #container {
+                width:100%;
+                padding: 10px 10px 10px 10px;
+            }
+
+            #left {
+                float:left;
+                width:30%;
+                height:300px;
+                min-height:300px;
+                max-height:300px;
+                background: #aaaabb;
+                padding:10px 10px 10px 10px;
+            }
+
+            #right {
+                width:100%;
+                height:300px;
+                min-height:300px;
+                max-height:300px;
+                background: #bbaaaa;
+                padding:10px 10px 10px 10px;
+                text-align:center;
+            }
+
+            #result {
+                font-size:140px;
+                text-align: center;
+                width:100%;
+                height:300px;
+                background:#eee;
+            }
+
+
+        </style>
+    </head>
+    <body>
+
+        <h2>Számológép</h2>
+        <p>Aritmetikai műveletek végzése számokon</p>
+
+        <header>
+            <img src="./img/calculator.jpg" width="200" height="100" alt="Számológép" />
+        </header>
+
+        <section>
+            <div id="container">
+                <div id="left">
+                    <table>
+                        <tr>
+                            <td>
+                                1. Operandus
+                                <br />
+                                <input id="a" type="text" placeholder="szám" />
+                            </td>
+                            <td>
+                                <br />
+                                <span id="operation"></span>
+                            </td>
+                            <td>
+                                2. Operandus
+                                <br />
+                                <input id="b" type="text" placeholder="szám" />
+                            </td>
+                        </tr>
+                    </table>
+                    <h3>Műveletek</h3>
+                    <span id="operations">
+                        <button id="add" onclick="add()">+</button>
+                        <button id="substract" onclick="substract()">-</button>
+                        <button id="divide" onclick="divide()">/</button>
+                        <button id="modulo" onclick="modulo()">%</button>
+                        <button id="multiply" onclick="multiply()">*</button>
+                    </span>
+
+                </div>
+                <div id="right">
+                    <span id="result">
+
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div id="history">
+                <a href="javascript:showResultHistory()">Eredmények</a>
+            </div>
+        </footer>
+
+        <script>
+
+            var resultHistory = [];
+
+            function add() {
+                var input1 = document.getElementById("a");
+                var input2 = document.getElementById("b");
+                var a = input1.value;
+                var b = input2.value;
+                if (checkOperands(a, b)) {
+                    var c = parseFloat(a) + parseFloat(b);
+                    setResult("+", c);
+                }
+            }
+
+            function substract() {
+                var input1 = document.getElementById("a");
+                var input2 = document.getElementById("b");
+                var a = input1.value;
+                var b = input2.value;
+                if (checkOperands(a, b)) {
+                    var c = a - b;
+                    var op = document.getElementById("operation");
+                    op.textContent = "-";
+                    setResult("-", c);
+                }
+            }
+
+            function divide() {
+                var input1 = document.getElementById("a");
+                var input2 = document.getElementById("b");
+                var a = input1.value;
+                var b = input2.value;
+                if (checkOperands(a, b)) {
+                    var c = a / b;
+                    var op = document.getElementById("operation");
+                    op.textContent = "/";
+                    setResult("/", c);
+                }
+            }
+
+            function modulo() {
+                var input1 = document.getElementById("a");
+                var input2 = document.getElementById("b");
+                var a = input1.value;
+                var b = input2.value;
+                if (checkOperands(a, b)) {
+                    var c = a % b;
+                    setResult("%", c);
+                }
+
+            }
+
+            function multiply() {
+                var input1 = document.getElementById("a");
+                var input2 = document.getElementById("b");
+                var a = input1.value;
+                var b = input2.value;
+                if (checkOperands(a, b)) {
+                    var c = a * b;
+                    setResult("*", c);
+                }
+            }
+
+            function setResult(op, value) {
+                var result = document.getElementById("result");
+                result.textContent = value;
+                resultHistory.push(value);
+                var operation = document.getElementById("operation");
+                operation.textContent = op;
+            }
+
+            function checkOperands(a, b) {
+                if (isNaN(a)) {
+                    alert("érvénytelen érték (a): " + a);
+                    return false;
+                }
+                if (isNaN(b)) {
+                    alert("érvénytelen érték (b): " + b.html);
+                    return false;
+                }
+                return true;
+            }
+
+            function showResultHistory() {
+                var text = "";
+                for (var i = 0; i < resultHistory.length; i++) {
+                    text += resultHistory[i] + "\r\n";
+                }
+                if (text === "") {
+                    text = "Nincs megjeleníthető előzmény.";
+                }
+                alert(text);
+            }
+
+            function clearResultHistory() {
+                resultHistory = [];
+            }
+        </script>
+
+    </body>
+</html>
