@@ -1,0 +1,71 @@
+        body {
+            background: darkblue;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        table {
+            width: 100%;
+            height: 100%;
+        }
+
+        td {
+            width: 50px;
+        }
+
+        button {
+            width: 100%;
+            height:100%;
+        }
+
+        
+        #keret {
+            margin: auto;
+            background: lightgray;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(to bottom, rgba(221,246,248,1) 0%, rgba(221,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+            padding: 20px 20px 20px 20px;
+        }
+
+        #eredmenyosszeg {
+            min-width: 100%;
+            width: 100%;
+            font-weight: bold;
+            text-align: right;
+            padding-top:20px;
+        }
+
+
+        #allapot {
+            border: 1px solid darkgray;
+            background: linear-gradient(to bottom, rgba(221,246,248,1) 0%, rgba(221,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+            min-height: 20%;
+            height: 20%;
+            background: rgba(242,246,248,1);
+            background: linear-gradient(to bottom, rgba(221,246,248,1) 0%, rgba(221,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+
+        }
+
+        #gombsor {
+            background: lightblue;
+            min-height: 80%;
+            height: 80%;
+            background: rgba(242,246,248,1);
+            background: linear-gradient(to bottom, rgba(221,246,248,1) 0%, rgba(221,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+        }
+
+        .mbutton {
+            background: rgba(220,220,240, 0.2);
+            border: 1px solid darkgray;
+        }
+
+        .opbutton {
+            background: linear-gradient(to bottom, rgba(221,246,248,1) 0%, rgba(221,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+        }
+
+        .szambutton {
+            font-weight: bold;
+        }
+    }
