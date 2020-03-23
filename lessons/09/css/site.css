@@ -34,7 +34,14 @@
             width: 100%;
             font-weight: bold;
             text-align: right;
-            padding-top:20px;
+            font-size: normal;
+        }
+
+        #muveletek {
+            padding-top: 5px;
+            font-size: smaller;
+            text-align: right;
+            height: 10px;
         }
 
 

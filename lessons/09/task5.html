@@ -14,13 +14,17 @@
 <body>
     <div id="keret">
         <div id="allapot">
-            <div id="eredmenyosszeg">
-            </div>
+            <div id="muveletek"></div>
+            <div id="eredmenyosszeg"></div>
         </div>
         <div id="gombsor">
         </div>
     </div>
     <script>
+
+        var operandus = 0;
+        var muvelet = null;
+
         function createGombsor(gombsor) {
             var out = "<table cellpadding='0' cellspacing='0'>";
             var sorok = gombsor['sorok'];
@@ -65,20 +69,20 @@
                         var id = gomb.getAttribute("id");
                         var classes = gomb.getAttribute("class").split(" ");
                         var value = gomb.innerHTML;
-                        muveletvegzo(id, classes, value);
+                        gombnyomasFeldolgozo(id, classes, value);
                     }
                 })(i);
             }
         }
 
-        function muveletvegzo(id, classes, value) {
+        function gombnyomasFeldolgozo(id, classes, value) {
             for (var i = 0; i < classes.length; i++) {
                 switch (classes[i]) {
                     case SZAM_BUTTON:
-                        kiir(value);
+                        eredmenyHozzaad(value);
                         break;
                     case OP_BUTTON:
-                        console.log(id);
+                        muveletvegzo(value);
                         break;
                     case MEM_BUTTON:
                         console.log(id);
@@ -91,9 +95,64 @@
             }
         }
 
-        function kiir(mit) {
+        function muveletvegzo(muvelet) {
+            switch (muvelet) {
+                case "+-":
+                    var eredmeny = eredmenyErtek();
+                    eredmeny = parseFloat(eredmeny) * -1;
+                    eredmenyTorol();
+                    eredmenyHozzaad(eredmeny);
+                    break;
+                default:
+                    alert("Nem implementált művelet jelenleg: " + muvelet);
+            }
+            var ertek = eredmenyErtek();
+            operandus = ertek;
+        }
+
+        function eredmenyErtek() {
+            var osszeg = document.getElementById("eredmenyosszeg").innerHTML;
+            if (osszeg.endsWith(",")) {
+                osszeg = osszeg.substring(0, osszeg.length - 1);
+            }
+            return osszeg;
+        }
+
+        function eredmenyTorol() {
+            var eredmeny = document.getElementById("eredmenyosszeg");
+            eredmeny.innerHTML = "";
+        }
+
+        function eredmenyHozzaad(mit) {
+            //(a + b) / c = d;
             var eredmenyosszeg = document.getElementById("eredmenyosszeg");
-            eredmenyosszeg.innerHTML += mit;
+            var jelenlegiSzam = eredmenyosszeg.innerHTML;
+            var ujSzam = jelenlegiSzam + mit;
+            ujSzam = ujSzam.trim();
+            if (ezValodiSzam(ujSzam)) {
+                eredmenyosszeg.innerHTML = ujSzam;
+            }
+        }
+
+        function ezValodiSzam(szoveg) {
+            const first_char = ['-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            var contains_comma = false;
+            for (var i = 0; i < szoveg.length; i++) {
+                if (i == 0) {
+                    if (!first_char.includes(szoveg.charAt(i))) {
+                        return false;
+                    }
+                }
+                if (szoveg.charAt(i) == ',') {
+                    if (contains_comma) {
+                        return false;
+                    } else {
+                        contains_comma = true;
+                    }
+
+                }
+            }
+            return true;
         }
 
         init();
@@ -123,3 +182,9 @@
 </body>
 
 </html>
+<!--
+Házi feladat
+- C opbutton művelet
+- Gyök művelet
+
+-->

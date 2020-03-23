@@ -159,7 +159,7 @@
                         "value": "+"
                     },
                     {
-                        "id": "eredmeny",
+                        "id": "egyenlo",
                         "class": "cbutton " + OP_BUTTON,
                         "value": "="
                     }
