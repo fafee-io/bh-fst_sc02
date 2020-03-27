@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Számológép</title>
+    <script src="./js/definitions.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/site.css" />
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="keret">
+        <div id="allapot">
+            <div id="muveletek"></div>
+            <div id="eredmenyosszeg">
+
+
+
+            </div>
+        </div>
+        <div id="gombsor">
+        </div>
+    </div>
+    <script>
+
+        var operandus = 0;
+        var muvelet = null;
+
+        function createGombsor(gombsor) {
+            var out = "<table cellpadding='0' cellspacing='0'>";
+            var sorok = gombsor['sorok'];
+            for (var index = 0; index < sorok.length; index++) {
+                var sor = sorok[index];
+                out += "<tr>";
+                for (var gombIndex = 0; gombIndex < sor.length; gombIndex++) {
+                    var gomb = sor[gombIndex];
+                    if (gomb == null) {
+                        continue;
+                    }
+                    switch (gomb['tipus']) {
+                        case hosszuGomb:
+                            out += "<td colspan='2'>";
+                            break;
+                        case normalEsUresGomb:
+                            console.log("ures gomb");
+                        //break;
+                        default:
+                            out += "<td>";
+                    }
+                    var id = gomb['id'];
+                    var clazz = gomb['class'];
+                    var value = gomb['value'];
+                    out += "<button id='" + id + "' class='" + clazz + "'>" + value + "</button>";
+                    out += "</td>";
+                }
+                out += "</tr>";
+            }
+            out += "</table>";
+            return out;
+        }
+
+        function init() {
+            var gombsorDiv = document.getElementById("gombsor");
+            gombsorDiv.innerHTML = createGombsor(gombsor);
+            var gombok = document.getElementsByClassName("cbutton");
+            for (var i = 0; i < gombok.length; i++) {
+                (function (i) {
+                    gombok[i].onclick = function () {
+                        var gomb = gombok[i];
+                        var id = gomb.getAttribute("id");
+                        var classes = gomb.getAttribute("class").split(" ");
+                        var value = gomb.innerHTML;
+                        gombnyomasFeldolgozo(id, classes, value);
+                    }
+                })(i);
+            }
+            eredmenyTorol();
+        }
+
+        var kellTorolni = false;
+
+        function gombnyomasFeldolgozo(id, classes, value) {
+            for (var i = 0; i < classes.length; i++) {
+                switch (classes[i]) {
+                    case SZAM_BUTTON:
+                        if (kellTorolni) {
+                            eredmenyTorol();
+                            kellTorolni = false;
+                        }
+                        eredmenyHozzaad(value);
+                        break;
+                    case OP_BUTTON:
+                        muveletvegzo(value);
+                        kellTorolni = true;
+                        break;
+                    case MEM_BUTTON:
+                        console.log(id);
+                        break;
+                    case C_BUTTON:
+                        break;
+                    default:
+                        alert("ismeretlen osztály: " + classes[i]);
+                }
+            }
+        }
+
+        function muveletvegzo(muvelet) {
+            switch (muvelet) {
+                case "+-":
+                    var eredmeny = eredmenybolSzam();
+                    eredmeny = parseFloat(eredmeny) * -1;
+                    eredmenyTorol();
+                    eredmenyHozzaad(eredmeny);
+                    break;
+                case "GYÖK":
+                    gyok();
+                    break;
+                case "C":
+                    eredmenyTorol();
+                    muveletekTorol();
+                    break;
+                default:
+                    alert("Nem implementált művelet jelenleg: " + muvelet);
+            }
+            var ertek = eredmenybolSzam();
+            operandus = ertek;
+        }
+
+        function gyok() {
+            var szam = eredmenybolSzam();
+            var eredmeny = Math.sqrt(szam);
+            var eddigiMuveletek = muveletekTartalma();
+            if (!eddigiMuveletek) {
+                eddigiMuveletek = szam;
+            }
+            eredmenyMegjelenit(eredmeny);
+            muveletekTorol();
+            muveletHozzad("sqrt(" + eddigiMuveletek + ")");
+        }
+
+        function eredmenybolSzam() {
+            var eredmeny = document.getElementById("eredmenyosszeg");
+            var szoveg = eredmeny.innerHTML;
+            return szoveg.replace(",", ".");
+        }
+
+        function eredmenyMegjelenit(szam) {
+            var eredmeny = document.getElementById("eredmenyosszeg");
+            eredmeny.innerHTML = szam.toString().replace(".", ",");
+        }
+
+        function eredmenyTorol() {
+            var eredmeny = document.getElementById("eredmenyosszeg");
+            eredmeny.innerHTML = "0";
+        }
+
+        function muveletekTartalma() {
+            var tartalom = document.getElementById("muveletek").innerHTML;
+            return tartalom;
+        }
+
+        function muveletHozzad(mit) {
+            var muveletek = document.getElementById("muveletek");
+            if (muveletek.innerHTML) {
+                muveletek.innerHTML += " " + mit;
+            } else {
+                muveletek.innerHTML += mit;
+            }
+        }
+
+        function muveletekTorol() {
+            var muveletek = document.getElementById("muveletek");
+            muveletek.innerHTML = "";
+        }
+
+        function eredmenyHozzaad(mit) {
+            var jelenlegiSzam = eredmenybolSzam();
+            if (jelenlegiSzam == 0) {
+                jelenlegiSzam = "";
+            }
+            var ujSzam = jelenlegiSzam + mit;
+            ujSzam = ujSzam.trim();
+            if (ezValodiSzam(ujSzam)) {
+                eredmenyMegjelenit(ujSzam);
+            }
+        }
+
+        function ezValodiSzam(szoveg) {
+            const first_char = ['-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            var contains_comma = false;
+            for (var i = 0; i < szoveg.length; i++) {
+                if (i == 0) {
+                    if (!first_char.includes(szoveg.charAt(i))) {
+                        return false;
+                    }
+                }
+                if (szoveg.charAt(i) == ',') {
+                    if (contains_comma) {
+                        return false;
+                    } else {
+                        contains_comma = true;
+                    }
+
+                }
+            }
+            return true;
+        }
+
+        init();
+
+
+
+
+
+        /*        function eredmenyOsszegTeszt(szam, mikorLegyenVege) {
+                    setTimeout(function() {
+                        var eredmenyosszeg = document.getElementById("eredmenyosszeg");
+                        eredmenyosszeg.innerHTML = szam;
+                        if (szam == mikorLegyenVege) {
+                            return;
+                        }
+                        szam = szam + 1;
+                        eredmenyOsszegTeszt(szam, mikorLegyenVege);
+                    }, 1000);
+                }
+
+                var kezdetiErtek = 0;
+                var legyenVegeEkkor = 5;
+                eredmenyOsszegTeszt(kezdetiErtek, legyenVegeEkkor);*/
+
+
+    </script>
+</body>
+
+</html>
+<!--
+Házi feladat
+- C opbutton művelet
+- Gyök művelet
+
+-->
