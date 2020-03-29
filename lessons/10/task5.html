@@ -26,7 +26,8 @@
     </div>
     <script>
 
-        var operandus = 0;
+        var operandus = null;
+        var operandus2 = null;
         var muvelet = null;
 
         function createGombsor(gombsor) {
@@ -118,15 +119,50 @@
                 case "GYÖK":
                     gyok();
                     break;
+                case "+":
+                    muveletinditas("osszead", "+");
+                    break;
+                case "-":
+                    muveletinditas("kivonas", "-");
+                    break;
                 case "C":
+                    operandus = null;
+                    operandus2 = null;
                     eredmenyTorol();
                     muveletekTorol();
                     break;
                 default:
                     alert("Nem implementált művelet jelenleg: " + muvelet);
             }
-            var ertek = eredmenybolSzam();
-            operandus = ertek;
+        }
+
+        function muveletinditas(fuggvenynev, muveletijel) {
+            if (muvelet != null && operandus != null) {
+                operandus2 = eredmenybolSzam();
+                var a = parseFloat(operandus);
+                var b = parseFloat(operandus2);
+                operandus = window[muvelet](a, b);
+                eredmenyMegjelenit(operandus);
+                operandus2 = null;
+                muvelet = fuggvenynev;
+                return;
+            }
+            if (operandus == null) {
+                var szam = eredmenybolSzam();
+                muveletHozzad(szam + " " + muveletijel + " ");
+                operandus = parseFloat(szam);
+                operandus2 = null;
+                muvelet = fuggvenynev;
+                return;
+            }
+        }
+
+        function osszead(a, b) {
+            return a + b;
+        }
+
+        function kivonas(a, b) {
+            return a - b;
         }
 
         function gyok() {
